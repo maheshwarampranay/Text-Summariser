@@ -1,7 +1,0 @@
-streamlit
-transformers
-torch
-nltk
-scikit-learn
-pdfplumber
-python-docx
