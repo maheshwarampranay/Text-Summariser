@@ -1,9 +1,3 @@
-
-"""
-Comprehensive Demo Script for Text Summarization
-Shows the complete workflow from training to inference
-"""
-
 import os
 import logging
 from text_summarizer_main import TextSummarizer, ModelConfig
