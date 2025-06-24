@@ -1,5 +1,3 @@
-# summarizer.py
-
 import nltk
 from transformers import pipeline
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -10,7 +8,6 @@ from docx import Document
 
 nltk.download('punkt')
 
-# Load pretrained abstractive summarizer
 abstractive_summarizer = pipeline("summarization", model="facebook/bart-large-cnn")
 
 def preprocess(text):

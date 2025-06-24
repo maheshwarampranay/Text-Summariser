@@ -1,5 +1,3 @@
-# app.py
-
 import streamlit as st
 from summarizer import (
     preprocess,
@@ -11,12 +9,10 @@ from summarizer import (
 st.set_page_config(page_title="Text Summarizer", layout="centered")
 
 st.title("📝 Text Summarizer")
-
 st.markdown("Summarize long documents or pasted text using extractive or abstractive methods.")
 
-# --- Input Method Selection ---
+# Input Method
 input_method = st.radio("Choose input method:", ["Type or paste text", "Upload a file"])
-
 text_input = ""
 
 if input_method == "Type or paste text":
@@ -26,19 +22,16 @@ else:
     if uploaded_file:
         text_input = read_file(uploaded_file)
 
-# --- Summarization Type ---
+# Summary Type
 summary_type = st.radio("Choose summarization type:", ["Extractive", "Abstractive"])
 
-# --- Run summarization ---
 if st.button("Summarize"):
     if text_input.strip():
         clean_text = preprocess(text_input)
-
         if summary_type == "Extractive":
             summary = extractive_summary(clean_text)
         else:
             summary = abstractive_summary(clean_text)
-
         st.subheader("📄 Summary:")
         st.write(summary)
     else:
