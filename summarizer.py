@@ -6,7 +6,11 @@ import numpy as np
 import pdfplumber
 from docx import Document
 
-nltk.download('punkt')
+import nltk
+try:
+    nltk.data.find('tokenizers/punkt')
+except LookupError:
+    nltk.download('punkt')
 
 abstractive_summarizer = pipeline("summarization", model="facebook/bart-large-cnn")
 
