@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Text Summarizer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>AI Text Summarizer</h1>
+            <p class="text-secondary">Transform long texts into concise summaries using state-of-the-art models</p>
+        </header>
+
+        <div class="main-layout">
+            <!-- Input Section -->
+            <section class="input-section">
+                <div class="card">
+                    <div class="card__header">
+                        <h3>Input Text</h3>
+                    </div>
+                    <div class="card__body">
+                        <textarea 
+                            id="inputText" 
+                            class="form-control input-textarea" 
+                            placeholder="Enter your text here or load an example..."
+                            rows="8"
+                        ></textarea>
+                        <div class="text-stats">
+                            <span id="inputWordCount">0 words</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Example Texts -->
+                <div class="card mt-16">
+                    <div class="card__header">
+                        <h3>Example Texts</h3>
+                    </div>
+                    <div class="card__body">
+                        <div class="examples-grid">
+                            <button class="btn btn--outline example-btn" data-example="0">
+                                <div class="example-title">Artificial Intelligence</div>
+                                <div class="example-desc">AI transformation and ethics</div>
+                            </button>
+                            <button class="btn btn--outline example-btn" data-example="1">
+                                <div class="example-title">Climate Change</div>
+                                <div class="example-desc">Environmental challenges</div>
+                            </button>
+                            <button class="btn btn--outline example-btn" data-example="2">
+                                <div class="example-title">Transformer Architecture</div>
+                                <div class="example-desc">Deep learning innovation</div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Configuration Section -->
+            <section class="config-section">
+                <!-- Model Selection -->
+                <div class="card">
+                    <div class="card__header">
+                        <h3>Model Configuration</h3>
+                    </div>
+                    <div class="card__body">
+                        <div class="form-group">
+                            <label class="form-label" for="modelSelect">Model</label>
+                            <select id="modelSelect" class="form-control">
+                                <option value="T5-Small">T5-Small</option>
+                                <option value="BART">BART</option>
+                                <option value="PEGASUS">PEGASUS</option>
+                            </select>
+                            <div class="model-description" id="modelDescription">
+                                Best for abstractive summarization
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="summaryLength">Summary Length</label>
+                            <input type="range" id="summaryLength" class="range-slider" min="0" max="2" value="1" step="1">
+                            <div class="range-labels">
+                                <span>Short</span>
+                                <span>Medium</span>
+                                <span>Long</span>
+                            </div>
+                            <div class="summary-length-desc" id="summaryLengthDesc">80-120 words</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Advanced Settings -->
+                <div class="card mt-16">
+                    <div class="card__header">
+                        <h3>Advanced Settings</h3>
+                    </div>
+                    <div class="card__body">
+                        <div class="form-group">
+                            <label class="form-label" for="beamCount">Number of Beams: <span id="beamValue">4</span></label>
+                            <input type="range" id="beamCount" class="range-slider" min="1" max="8" value="4" step="1">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="temperature">Temperature: <span id="tempValue">1.0</span></label>
+                            <input type="range" id="temperature" class="range-slider" min="0.1" max="2.0" value="1.0" step="0.1">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label" for="summaryStyle">Summary Style</label>
+                            <select id="summaryStyle" class="form-control">
+                                <option value="formal">Formal</option>
+                                <option value="casual">Casual</option>
+                                <option value="technical">Technical</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Summarize Button -->
+                <button id="summarizeBtn" class="btn btn--primary btn--full-width btn--lg mt-16">
+                    <span class="btn-text">Summarize Text</span>
+                    <div class="loading-spinner hidden" id="loadingSpinner"></div>
+                </button>
+            </section>
+
+            <!-- Results Section -->
+            <section class="results-section">
+                <div class="card" id="resultsCard" style="display: none;">
+                    <div class="card__header">
+                        <h3>Summary Results</h3>
+                    </div>
+                    <div class="card__body">
+                        <div class="summary-output" id="summaryOutput"></div>
+                        
+                        <div class="results-stats">
+                            <div class="stat-item">
+                                <span class="stat-label">Original Words:</span>
+                                <span class="stat-value" id="originalWords">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Summary Words:</span>
+                                <span class="stat-value" id="summaryWords">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Compression Ratio:</span>
+                                <span class="stat-value" id="compressionRatio">0:1</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Processing Time:</span>
+                                <span class="stat-value" id="processingTime">0.0s</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Model Performance -->
+                <div class="card mt-16">
+                    <div class="card__header">
+                        <h3>Model Performance Comparison</h3>
+                    </div>
+                    <div class="card__body">
+                        <div class="performance-chart">
+                            <img src="https://pplx-res.cloudinary.com/image/upload/v1750776402/pplx_code_interpreter/ac19a464_ki9asx.jpg" 
+                                 alt="Model Performance Comparison" 
+                                 class="chart-image">
+                        </div>
+                        
+                        <div class="performance-table">
+                            <table class="metrics-table">
+                                <thead>
+                                    <tr>
+                                        <th>Model</th>
+                                        <th>ROUGE-1</th>
+                                        <th>ROUGE-2</th>
+                                        <th>ROUGE-L</th>
+                                        <th>METEOR</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="model-row" data-model="T5-Small">
+                                        <td><strong>T5-Small</strong></td>
+                                        <td>35.4</td>
+                                        <td>14.0</td>
+                                        <td>28.5</td>
+                                        <td>35.0</td>
+                                    </tr>
+                                    <tr class="model-row" data-model="BART">
+                                        <td><strong>BART</strong></td>
+                                        <td>30.8</td>
+                                        <td>15.7</td>
+                                        <td>26.2</td>
+                                        <td>28.0</td>
+                                    </tr>
+                                    <tr class="model-row" data-model="PEGASUS">
+                                        <td><strong>PEGASUS</strong></td>
+                                        <td>24.5</td>
+                                        <td>12.0</td>
+                                        <td>21.8</td>
+                                        <td>25.0</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
