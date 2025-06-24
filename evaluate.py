@@ -1,8 +1,4 @@
 
-"""
-Evaluation utilities for text summarization models
-"""
-
 import evaluate
 import numpy as np
 from typing import List, Dict
