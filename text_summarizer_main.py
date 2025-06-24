@@ -1,9 +1,4 @@
 
-"""
-Text Summarization Training Script
-Similar to the style shown in the uploaded notebook
-"""
-
 import os
 import torch
 import logging
